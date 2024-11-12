@@ -1,4 +1,5 @@
 require('dotenv').config();
+const dotenv = require('dotenv')
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -9,7 +10,9 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth')
 const postRoutes = require('./routes/posts')
 
-
+//Route usage
+app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes)
 
 
 //connect to MongoDB
