@@ -1,28 +1,50 @@
 require('dotenv').config();
-const dotenv = require('dotenv')
+
+// Import dependencies
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const passport = require('passport');
+
+// Import configuration files
+const configurePassport = require('./config/passport');
+const verifyToken = require('./middleware/verifyToken');
+
+// Middleware setup
+app.use(morgan('dev'));
+app.use(express.json());
 
 
-//Route imports
-const authRoutes = require('./routes/auth')
-const postRoutes = require('./routes/posts')
+// Configure and initialize Passport
+configurePassport(passport);
+app.use(passport.initialize());
 
-//Route usage
+// Route imports
+const authRoutes = require('./routes/auth');
+const postRoutes = require('./routes/posts');
+
+// Route setup
 app.use('/api/auth', authRoutes);
-app.use('/api/posts', postRoutes)
+app.use('/api/posts', verifyToken, postRoutes);
+
+// Home route
+app.get('/', (req, res) => {
+    res.send('We live, baby!');
+});
 
 
-//connect to MongoDB
+
+// Connect to MongoDB
 mongoose.connect(process.env.DB_CONNECTOR)
-    .then(() => console.log('Your mongoDB connector is on...'))
-    .catch(err => console.error('Database connection error:', err));
+    .then(() => console.log('MongoDB connected...'))
+    .catch(err => {
+        console.error('Database connection error:', err);
+        process.exit(1);
+    });
 
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-

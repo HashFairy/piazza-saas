@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+// database schema for piazza post
 const PostSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -7,46 +7,55 @@ const PostSchema = new mongoose.Schema({
     },
     topic: {
         type: String,
-        enum:
-            ['Politics', 'Health', 'Sport','Tech'],
+        enum: ['Politics', 'Health', 'Sport', 'Tech'],
         required: true
     },
     message: {
+        type: String,
+        required: true
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now
+    },
+    expirationTime: {
         type: Date,
         required: true
     },
-    timestamp:{
-        type:Date,
-        default: Date.now
-    },
-    expirationTime:{
-        type:Date,
-        required:true
-    },
-    status:{
-        type:String,
-        enum:
-            ['Live', 'Expired'],
+    status: {
+        type: String,
+        enum: ['Live', 'Expired'],
         default: 'Live'
     },
-
-    owner:{
+    owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', required: true
+        ref: 'User',
+        required: true
     },
-    likes:{
-        type:String,
-        default: 0
-    },
-    dislikes:{
+    likes: {
         type: Number,
         default: 0
     },
-    comments:[{
-        user: String,
-        message:String,
-        timestamp: Date,
-    }],
+    dislikes: {
+        type: Number,
+        default: 0
+    },
+    comments: [
+        {
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                required: true
+            },
+            message: {
+                type: String
+            },
+            timestamp: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ]
 });
 
-module.exports = mongoose.model('Post', PostSchema)
+module.exports = mongoose.model('Post', PostSchema);
