@@ -54,12 +54,6 @@ router.post('/:postId/like', auth, async (req, res) => {
         }
 
 
-
-        if (!message || message.trim() === '') {
-            return res.status(400).json({ message: 'Comment message is required.' });
-        }
-
-
         post.comments.push({ user: req.user.userId, message });
         await post.save();
 
