@@ -40,7 +40,7 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
-// Like a Post
+// Like a Post from other users
 router.post('/:postId/like', auth, async (req, res) => {
     try {
         const post = await Post.findById(req.params.postId);
