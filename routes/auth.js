@@ -63,7 +63,7 @@ router.post('/login', async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
         // Generate JWT token
-        const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, { expiresIn: '4h' });
         res.json({ message: 'Login successful', token, user: { id: user._id, name: user.name, email: user.email } });
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });
@@ -82,7 +82,7 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/redirect', passport.authenticate('google', { session: false, failureRedirect: '/' }), (req, res) => {
     const { user } = req;
 
-    const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, { expiresIn: '4h' });
     res.json({ message: 'Successfully logged in with Google!', token, user });
 });
 

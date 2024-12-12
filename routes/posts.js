@@ -54,21 +54,12 @@ router.post('/:postId/like', auth, async (req, res) => {
         }
 
 
-
-        if (!message || message.trim() === '') {
-            return res.status(400).json({ message: 'Comment message is required.' });
-        }
-
-
-        post.comments.push({ user: req.user.userId, message });
-        await post.save();
-
-
         if (post.owner.toString() === req.user.userId) {
             return res.status(400).json({ message: 'You cannot like your own post.' });
         }
 
         post.likes += 1;
+
         await post.save();
 
         res.status(200).json({ message: 'Post liked successfully', likes: post.likes });
