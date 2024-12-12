@@ -53,7 +53,6 @@ router.post('/:postId/like', auth, async (req, res) => {
             return res.status(400).json({ message: 'Post has expired and cannot be liked' });
         }
 
-
         if (post.owner.toString() === req.user.userId) {
             return res.status(400).json({ message: 'You cannot like your own post.' });
         }
